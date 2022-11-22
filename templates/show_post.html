@@ -8,11 +8,11 @@
     <p>{{post.content}}</p>
 </div>
 <div>
-    <p>By</p>
+    <p>By {{post.user.get_full_name()}}</p>
 </div>
 <div>
-    <button class="btn btn-outline-primary btn-sm">Cancel</button>
-    <button class="btn btn-primary btn-sm">Edit</button>
-    <button class="btn btn-danger btn-sm">Delete</button>
+    <a href="/users" class="btn btn-outline-primary btn-sm">Cancel</a>
+    <a href="" class="btn btn-primary btn-sm">Edit</a>
+    <a href="" class="btn btn-danger btn-sm">Delete</a>
 </div>
 {% endblock %}

@@ -13,7 +13,7 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 debug = DebugToolbarExtension(app)
 
 connect_db(app)
-db.create_all()
+# db.create_all()
 
 @app.route('/')
 def to_users():
@@ -49,14 +49,15 @@ def add_user():
 def show_user(uid):
     """ Displays User via User ID set in db """
     user = User.query.get(uid)
-    posts = Post.query.all()
+    posts = Post.user
     return render_template('show_user.html', user=user, uid=uid, posts=posts)
 
 @app.route('/users/<int:uid>/edit')
 def edit_user(uid):
     """ Displays Edit User Form """
     user = User.query.get(uid)
-    return render_template('edit_user_form.html', user=user, uid=uid)
+    posts = user.Post
+    return render_template('edit_user_form.html', user=user, posts=posts)
 
 @app.route('/users/<int:uid>/edit', methods=['POST'])
 def edit_user_post(uid):
@@ -91,8 +92,9 @@ def add_post(uid):
     """ Adds a new post to the user's detail page """
     title = request.form['title']
     content = request.form['content']
+    user = User.query.get_or_404(uid)
     
-    new_user = Post(title=title,content=content)
+    new_user = Post(title=title,content=content, user=user)
     db.session.add(new_user)
     db.session.commit()
     return redirect(f'/users/{uid}')
