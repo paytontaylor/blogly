@@ -49,15 +49,14 @@ def add_user():
 def show_user(uid):
     """ Displays User via User ID set in db """
     user = User.query.get(uid)
-    posts = Post.user
+    posts = user.posts
     return render_template('show_user.html', user=user, uid=uid, posts=posts)
 
 @app.route('/users/<int:uid>/edit')
 def edit_user(uid):
     """ Displays Edit User Form """
     user = User.query.get(uid)
-    posts = user.Post
-    return render_template('edit_user_form.html', user=user, posts=posts)
+    return render_template('edit_user_form.html', user=user)
 
 @app.route('/users/<int:uid>/edit', methods=['POST'])
 def edit_user_post(uid):
@@ -101,7 +100,48 @@ def add_post(uid):
 
 @app.route('/posts/<int:pid>')
 def show_post(pid):
+    """ Displays Post Title, Content, and User that Posted """
     post = Post.query.get(pid)
     return render_template('show_post.html',post=post)
+
+@app.route('/posts/<int:pid>/edit')
+def show_post_edit_form(pid):
+    """ Displays form to edit a post """
+    post = Post.query.get(pid)
+    user = post.user
+    return render_template('edit_post_form.html',post=post,user=user)
+
+@app.route('/posts/<int:pid>/edit', methods=['POST'])
+def save_post_edit(pid):
+    post = Post.query.get(pid)
+    title = request.form['title']
+    content= request.form['content']
+    post.title = title
+    post.content = content
+    db.session.add(post)
+    db.session.commit()
+    return redirect(f'/posts/{pid}')
+
+@app.route('/posts/<int:pid>/delete')
+def delete_post(pid):
+    """ Deletes User """
+    post = Post.query.get(pid)
+    user = post.user.id
+    db.session.delete(post)
+    db.session.commit()
+    return redirect(f'/users/{user}')
+
+@app.route('/tags')
+def show_all_tags():
+    return render_template('show_tags.html')
+
+@app.route('/tags/<int:id>')
+def show_tag():
+    return render_template('show_tag.html')
+
+@app.route('/tags/new')
+def show_create_tag_form():
+    return render_template('create_tag_form.html')
+
 
 

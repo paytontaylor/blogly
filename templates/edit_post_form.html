@@ -1,0 +1,30 @@
+{% extends 'base.html' %}{% block title %}
+<title>Edit Post</title>
+{% endblock%} {% block content %}
+<div class="container">
+    <h1>Edit Post</h1>
+    <form method="post">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" name="title" id="title" />
+        </div>
+        <div class="form-group">
+            <label for="content">Content</label>
+            <input
+                type="text"
+                class="form-control"
+                name="content"
+                id="content"
+            />
+        </div>
+        <button
+            class="btn btn-danger btn-sm"
+            formmethod="get"
+            formaction="/users/{{user.id}}"
+        >
+            Cancel
+        </button>
+        <button class="btn btn-primary btn-sm">Save</button>
+    </form>
+</div>
+{% endblock %}
